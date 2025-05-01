@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,6 +16,8 @@ public class CategoriaDTO {
 
     @NotBlank
     private String descricao;
+
+    private list<SugestaoDTO> sugestoes = new ArrayList<Object>();
 
     public CategoriaDTO(CategoriaEntity entity){
         this.id = entity.getId();

@@ -1,5 +1,6 @@
 package br.com.fatecararas.tp2suggestionbox.resources;
 
+import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -8,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import br.com.fatecararas.tp2suggestionbox.dto.CategoriaDTO;
 import br.com.fatecararas.tp2suggestionbox.services.CategoriaService;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,13 +22,17 @@ public class CategoriaResource {
     private CategoriaService service;
     
     // @ResponseStatus(code = HttpStatus.CREATED)
-    @PostMapping("/salvar")
-    public ResponseEntity<?> salvar(@RequestBody CategoriaDTO dto) {
-        System.out.println("DTO recebido.");
-        System.out.println(dto);
+    @PostMapping()
+    public ResponseEntity<?> salvar(@Valid @RequestBody CategoriaDTO dto) {
+
         try {
-            service.salvar(dto);
-            // return ResponseEntity.status(HttpStatus.CREATED).body(dto); 
+            CategoriaDTO categoria = service.salvar(dto);
+
+            URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                    .path("/{id}")
+                    .buildAndExpand(categoria.getId())
+                    .toUri();
+            return ResponseEntity.created(uri).build();
         } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }        
@@ -41,5 +48,16 @@ public class CategoriaResource {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(categorias);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void ecxluir(@PathVariable Integer id){
+        service.exluir(id);
+    }
+
+    @GetMapping("{id}")
+    public  CategoriaDTO buscarPorId(@PathVariable Integer id){
+        return service.buscarPoId(id);
     }
 }
