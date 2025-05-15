@@ -7,6 +7,7 @@ import br.com.fatecararas.tp2suggestionbox.dto.CategoriaDTO;
 import br.com.fatecararas.tp2suggestionbox.model.entities.CategoriaEntity;
 import br.com.fatecararas.tp2suggestionbox.repositories.CategoriaRepository;
 
+import javax.swing.text.html.parser.Entity;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,5 +45,17 @@ public class CategoriaService {
             return mapper.map(optional.get(), CategoriaDTO.class);
         }
         throw new RuntimeException("Categoria não encontrada");
+    }
+
+    public void editar(CategoriaDTO dto) {
+        CategoriaEntity entity = mapper.map(dto, CategoriaEntity.class);
+        repository.save(entity);
+    }
+
+    public CategoriaDTO buscarDescricao(String descricao) {
+
+        CategoriaEntity buscado =  repository.findFirstByDescricaoContaining(descricao);
+
+        return mapper.map(buscado, CategoriaDTO.class);
     }
 }

@@ -1,5 +1,6 @@
 package br.com.fatecararas.tp2suggestionbox.resources;
 
+import br.com.fatecararas.tp2suggestionbox.model.entities.CategoriaEntity;
 import jakarta.validation.Valid;
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,5 +59,19 @@ public class CategoriaResource {
     @GetMapping("/{id}")
     public CategoriaDTO buscarPorId(@PathVariable Integer id) {
         return service.buscarPorId(id);
+    }
+
+    @PutMapping("/editar")
+    public void editar( @Valid @RequestBody CategoriaDTO dto ){
+
+        service.editar(dto);
+    }
+
+
+    @GetMapping("/descricao/{descricao}")
+
+    public CategoriaDTO buscarDescricao( @PathVariable String descricao ){
+
+        return service.buscarDescricao(descricao);
     }
 }
